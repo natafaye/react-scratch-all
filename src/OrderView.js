@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 
 export default function OrderView({ orderProp, toGo }) {
 
@@ -7,18 +7,16 @@ export default function OrderView({ orderProp, toGo }) {
         toGoMessage = "no"
     }
 
+    useEffect(() => {
+        console.log("rendered first time")
+    }, [])
+
     return (
         <div>
             Main: {orderProp.main} {orderProp.drink}
-            <p>is to go? {toGoMessage}</p>
         </div>
     )
 }
 
-// const { order, toGo } = {
-//     order: {
-//         main: "burrito",
-//         drink: "sprite"
-//     },
-//     toGo: true
-// }
+
+// WAITER = RENDERING

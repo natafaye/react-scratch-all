@@ -41,6 +41,7 @@ export default function App() {
 
   return (
     <div>
+      {/* { (weather === "hot") ? 5 : 7 } */}
       <button onClick={onClearOrderClick}>Clear Order</button>
       <h2>Welcome to our Restaurant!</h2>
       <NavLink to="/order-form">Order Form</NavLink><br/>
@@ -56,12 +57,22 @@ export default function App() {
 }
 
 
-// props = {
-//   order: {
-//     main: "burrito",
-//     drink: "sprite"
-//   },
-//   toGo: true
+
+// Probably a bad idea
+//const error = (weather === "") ? (weather === "NONE") ? "error" : "error" : "none"
+
+// const weather = "hot"
+
+// let something = 3;
+// if(weather === "hot") {
+//   something = 5;
+// }
+// else {
+//   something = 7;
 // }
 
-      
+// let something = (weather === "hot") ? 5 : 7
+
+// console.log( (weather === "hot") ? 5 : 7 )
+
+// return (weather === "hot") ? 5 : 7
