@@ -1,6 +1,7 @@
 import { Field, Form, Formik } from 'formik'
 import React, { useState } from 'react'
 
+// FORMIK
 
 export default function OrderForm({ setOrder }) {
     const handleSubmit = (values) => {
@@ -38,7 +39,7 @@ export default function OrderForm({ setOrder }) {
 
 
 
-
+// ONE PIECE OF STATE
 
 // export default function OrderForm({ setOrder }) {
 //     const [formValues, setFormValues] = useState({
