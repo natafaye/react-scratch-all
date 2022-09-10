@@ -1,17 +1,23 @@
-import React from 'react';
-import './App.css';
-import NewPostForm from './NewPostForm';
-import PostList from './PostList';
+import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
+import AddProductForm from './AddProductForm';
+import './App.css';
+import CartList from './CartList';
+import ProductList from './ProductList';
 
 function App() {
-  // Get all the posts and give it to PostList - useSelector
-  const posts = useSelector(state => state.posts.postArray)
+  const numItemsInCart = useSelector(state => state.cart.shoppingCart.length) // state.cart is undefined
+
+  // For reference
+  // const entireState = useSelector(state => state)
+  // console.log(entireState);
 
   return (
     <div>
-      <NewPostForm/>
-      <PostList posts={ posts }/>
+      How many items in cart: { numItemsInCart }
+      <AddProductForm/>
+      <ProductList/>
+      <CartList/>
     </div>
   );
 }
