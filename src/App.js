@@ -1,55 +1,31 @@
-import React, { useEffect, useState } from 'react';
-import logo from './logo.svg';
-import { Counter } from './features/counter/Counter';
-import './App.css';
+import React, { useEffect } from 'react'
+import { useDispatch, useSelector } from 'react-redux';
+import { postProduct, fetchProducts } from './productSlice';
 
-const fetchAllProducts = async () => {
-  const response = await fetch("http://localhost:3001/products")
-  const data = await response.json()
-  return data;
-}
+export default function App() {
+  const productList = useSelector(state => state.products.productList);
+  const errorMessage = useSelector(state => state.products.errorMessage);
+  const loading = useSelector(state => state.products.loading);
 
-function App() {
-  const [productList, setProductList] = useState([])
+  const dispatch = useDispatch();
 
   useEffect(() => {
-    const refreshProducts = async () => {
-      const freshProducts = await fetchAllProducts();
-      setProductList(freshProducts);
-    }
-    refreshProducts();
-  }, [])
+    dispatch(fetchProducts())
+  }, []) // empty dependency array = only run after first render (but it will run twice because of strict mode)
 
-  const deleteProduct = (idToDelete) => {
-    // delete the product from the backend
-    fetch("http://localhost:3001/products/" + idToDelete, { method: "DELETE" })
-    // update the data on the frontend to match
-    setProductList(productList.filter(p => p.id !== idToDelete))
-  }
-
-  const createProduct = async (newProductData) => {
-    // create the product on the backend
-    const response = await fetch("http://localhost:3001/products", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(newProductData)
-    })
-    const dataFromServer = await response.json();
-
-    // update the data on the frontend to match
-    setProductList([...productList, dataFromServer])
-}
-
-return (
-  <div className="App">
-    <button className="btn btn-primary" onClick={() => createProduct({ name: "Steel", price: 50 })}>Create Steel</button>
-    <div>
-      {productList.map(product =>
-        <div key={product.id}>{product.name}<button onClick={() => deleteProduct(product.id)}>Delete</button></div>
-      )}
+  return (
+    <div className="m-4">
+      <button className="btn btn-primary" onClick={() => dispatch(postProduct({ name: "Steel", price: 50 }))} disabled={loading}>Create Steel</button>
+      { (errorMessage) ? <div className="alert alert-danger">errorMessage</div> : null }
+      { (loading) ? <p>Loading...</p> : null }
+      <ul className="list-group mt-3">
+        {productList.map(product => (
+          <li className="list-group-item" key={product.id}>
+            {/* <button className="btn btn-danger me-2" onClick={() => deleteProduct(product.id)} disabled={loading}>Delete</button> */}
+            {product.name} - ${product.price}
+          </li>
+        ))}
+      </ul>
     </div>
-  </div>
-);
+  )
 }
-
-export default App;
