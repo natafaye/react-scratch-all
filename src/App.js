@@ -1,37 +1,78 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React from 'react'
+import Greeting from './Greeting'
 
-function Message(props) {
+export default function App() {
+  const names = ["Abigail", "Derek", "Simone"]
+
+  // const arrayOfParagraphs = names.map(name => <p>Hello { name }!</p>)
+
+  //const arrayOfParagraphs = names.map(name => <Greeting nameToGreet={name}/>)
+
+  // arrayOfParagraphs = [
+  //   <p>Hello Abigail!</p>,
+  //   <p>Hello Derek!</p>
+  // ]
+
   return (
-    <div className="bg-primary text-white p-3">
-      { props.messageToShow }
+    <div>
+      <h1 className="text-danger">App</h1>
+      <p className="green-text m-4">I'm the best.</p>
+
+      { names.map(name => <Greeting nameToGreet={name} key={name}/>) }
+
+      {/* <Greeting nameToGreet="Doug" color="green"/> */}
+      {/* <Greeting nameToGreet={ names[0] }/>
+      <Greeting nameToGreet={ names[1] }/>
+      <Greeting nameToGreet={ names[2] }/> */}
     </div>
   )
 }
 
-function App() {
+// props = {
+//   nameToGreet: "Natalie",
+//   color: "green"
+// }
 
-  const name = "Natalie"
 
-  const paragraph = <p>fdsfds { 5 + 3 }</p>
 
-  return (
-    <>
-      <p></p>
-      <div className="container">
-        <div className="row">
-          <div className="col-3">
-            { name }
-            { paragraph }
-            <Message messageToShow="Hi there!" />
-            <Message messageToShow="How are you?" />
-            <Message messageToShow="Goodbye!" />
-          </div>
-        </div>
-      </div>
-    </>
-  );
-}
 
-export default App;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// function isNotEmpty(paper) {
+//   return paper !== '';
+// }
+
+// const isNotEmpty = (paper) => {
+//   return paper !== '';
+// }
+
+// const isNotEmpty = (paper) => paper !== '';
+
+// const isNotEmpty = paper => paper !== '';
+
+// const isNotEmpty = p => p !== '';
