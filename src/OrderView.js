@@ -1,24 +1,21 @@
 import React from 'react'
 
-export default function OrderView({ orderProp, toGo }) {
-
-    let toGoMessage = "yes"
-    if (!toGo) {
-        toGoMessage = "no"
-    }
-
-    return (
-        <div>
-            Main: {orderProp.main} {orderProp.drink}
-            <p>is to go? {toGoMessage}</p>
-        </div>
-    )
+export default function OrderView({ amount, order }) {
+  return (
+    <div>I ordered { amount } { order }</div>
+  )
 }
 
-// const { order, toGo } = {
-//     order: {
-//         main: "burrito",
-//         drink: "sprite"
-//     },
-//     toGo: true
+// props = {
+//     order: "tacos",
+//     amount: 5
+//   }
+
+
+// function getDinner() {
+//     const dessert = "pie";
+//     const side = "potatoes"
+//     return [dessert, side]
 // }
+
+// const [goodPart, decentPart] = getDinner();
