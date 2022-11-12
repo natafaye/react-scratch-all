@@ -1,112 +1,109 @@
 import { Field, Form, Formik } from 'formik'
 import React, { useState } from 'react'
 
-// FORMIK
+/*** Normal React Form, Multiple Pieces of State ***/
 
-export default function OrderForm({ setOrder }) {
-    const handleSubmit = (values) => {
-        setOrder({
-            main: values.main,
-            drink: values.drink
-        })
+// export default function OrderForm({ onSubmit }) {
+
+//     // form data
+//     const [mealValue, setMealValue] = useState("")
+//     const [nameValue, setNameValue] = useState("")
+
+//     // change event handlers
+//     const onMealChange = (event) => setMealValue(event.target.value)
+//     const onNameChange = (event) => setNameValue(event.target.value)
+
+//     // submit event handler
+//     const onSubmitClick = (event) => {
+//         event.preventDefault() // prevents the submit button from refreshing the page
+//         onSubmit({ meal: mealValue, name: nameValue })
+//     }
+
+//     return (
+//         <form>
+//             <div>
+//                 <label>Meal:</label>
+//                 <input type="text" value={mealValue} onChange={onMealChange}/>
+//             </div>
+//             <div>
+//                 <label>Name on Order:</label>
+//                 <input type="text" value={nameValue} onChange={onNameChange}/>
+//             </div>
+//             <button onClick={onSubmitClick}>Submit</button>
+//         </form>
+//     )
+// }
+
+
+
+
+/*** Normal React Form, One Piece of State ***/
+
+// export default function OrderForm({ onSubmit }) {
+
+//     const initialValues = { meal: "", name: "", topping: "" }
+
+//     // form data
+//     const [formData, setFormData] = useState(initialValues)
+
+//     // change event handlers
+//     // const onMealChange = (event) => setFormData({ ...formData, meal: event.target.value })
+//     // const onNameChange = (event) => setFormData({ ...formData, name: event.target.value })
+//     const onChange = (event) => setFormData({ ...formData, [event.target.name]: event.target.value })
+
+//     // submit event handler
+//     const onSubmitClick = (event) => {
+//         event.preventDefault() // prevents the submit button from refreshing the page
+//         onSubmit({ meal: formData.meal, name: formData.name })
+//     }
+
+//     return (
+//         <form>
+//             <div>
+//                 <label>Meal:</label>
+//                 <input type="text" name="meal" value={formData.meal} onChange={onChange}/>
+//             </div>
+//             <div>
+//                 <label>Name on Order:</label>
+//                 <input type="text" name="order" value={formData.name} onChange={onChange}/>
+//             </div>
+//             <div>
+//                 <label>Topping:</label>
+//                 <input type="text" name="topping" value={formData.topping} onChange={onChange}/>
+//             </div>
+//             <button onClick={onSubmitClick}>Submit</button>
+//         </form>
+//     )
+// }
+
+
+
+
+/*** Formik Form ***/
+
+export default function OrderForm({ onSubmit }) {
+    // submit event handler
+    const onSubmitClick = (values) => {
+        onSubmit({ meal: values.meal, name: values.name })
     }
 
     return (
-        <Formik
-            initialValues={{
-                main: "",
-                drink: ""
-            }}
-            onSubmit={handleSubmit}
-        >
+        <Formik onSubmit={onSubmitClick} initialValues={{ meal: "", name: "", topping: "" }}>
             <Form>
-                Change Your Order:
                 <div>
-                    <label htmlFor="main-input">Main:</label>
-                    <Field id="main-input" name="main"/>
+                    <label>Meal:</label>
+                    <Field type="text" name="meal"/>
                 </div>
                 <div>
-                    <label htmlFor="drink-input">Drink:</label>
-                    <Field id="drink-input" name="drink"/>
+                    <label>Name on Order:</label>
+                    <Field type="text" name="name"/>
                 </div>
-                <button className='btn btn-success'>Submit Order</button>
+                <div>
+                    <label>Topping:</label>
+                    <Field type="text" name="topping"/>
+                </div>
+                <button type="submit">Submit</button>
             </Form>
         </Formik>
     )
 }
-
-
-
-
-
-// ONE PIECE OF STATE
-
-// export default function OrderForm({ setOrder }) {
-//     const [formValues, setFormValues] = useState({
-//         main: "",
-//         drink: ""
-//     })
-
-//     const handleChange = (event) => setFormValues({ ...formValues, [event.target.name]: event.target.value })
-
-//     const handleSubmit = (event) => {
-//         event.preventDefault()
-
-//         setOrder({
-//             main: formValues.main,
-//             drink: formValues.drink
-//         })
-//     }
-
-//     return (
-//         <form>
-//             Change Your Order:
-//             <div>
-//                 <label htmlFor="main-input">Main:</label>
-//                 <input type="text" id="main-input" name="main" value={formValues.main} onChange={handleChange}/>
-//             </div>
-//             <div>
-//                 <label htmlFor="drink-input">Drink:</label>
-//                 <input type="text" id="drink-input" name="drink" value={formValues.drink} onChange={handleChange}/>
-//             </div>
-//             <button className='btn btn-success' onClick={handleSubmit}>Submit Order</button>
-//         </form>
-//     )
-// }
-
-
-
-
-// MULTIPLE PIECES OF STATE
-
-// export default function OrderForm({ setOrder }) {
-//     const [mainValue, setMainValue] = useState("");
-//     const [drinkValue, setDrinkValue] = useState("");
-
-//     const handleMainChange = (event) => setMainValue(event.target.value)
-//     const handleDrinkChange = (event) => setDrinkValue(event.target.value)
-
-//     const handleSubmit = (event) => {
-//         event.preventDefault()
-
-//         setOrder({
-//             main: mainValue,
-//             drink: drinkValue
-//         })
-//     }
-
-//     return (
-//         <form>
-//             Change Your Order:
-//             <div>
-//                 <label htmlFor="main-input">Main:</label>
-//                 <input type="text" id="main-input" value={mainValue} onChange={handleMainChange}/>
-//             </div>
-//             <div>
-//                 <label htmlFor="drink-input">Drink:</label>
-//                 <input type="text" id="drink-input" value={drinkValue} onChange={handleDrinkChange}/>
-//             </div>
-//             <button className='btn btn-success' onClick={handleSubmit}>Submit Order</button>
-//         </form>
-//     )
-// }
