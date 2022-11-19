@@ -1,25 +1,7 @@
-import React, { useState } from 'react';
-import { useSelector } from 'react-redux';
-import AddProductForm from './AddProductForm';
-import './App.css';
-import CartList from './CartList';
-import ProductList from './ProductList';
+import React from 'react'
 
-function App() {
-  const numItemsInCart = useSelector(state => state.cart.shoppingCart.length) // state.cart is undefined
-
-  // For reference
-  // const entireState = useSelector(state => state)
-  // console.log(entireState);
-
+export default function App() {
   return (
-    <div>
-      How many items in cart: { numItemsInCart }
-      <AddProductForm/>
-      <ProductList/>
-      <CartList/>
-    </div>
-  );
+    <div>App</div>
+  )
 }
-
-export default App;
