@@ -31,7 +31,14 @@ export function Counter() {
         <button
           className={styles.button}
           aria-label="Increment value"
-          onClick={() => dispatch(increment())}
+          onClick={() => {
+
+            // MOVED INTO MIDDLEWARE
+            // also tell the backend
+            // fetch("fdsfds")
+
+            dispatch(increment())
+          }}
         >
           +
         </button>

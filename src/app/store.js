@@ -4,6 +4,7 @@ import { productReducer } from '../productSlice';
 
 export const store = configureStore({
   reducer: {
-    counter: counterReducer
+    counter: counterReducer,
+    products: productReducer
   },
 });
