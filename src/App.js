@@ -1,39 +1,63 @@
 import React from 'react'
-import Greeting from './Greeting'
+import SearchBar from './SearchBar'
+import ToolbarButton from './ToolbarButton'
 
 export default function App() {
-  const names = ["Abigail", "Derek", "Simone"]
+  const p = <p>I'm a paragraph {5 + 3}</p>
 
-  // const arrayOfParagraphs = names.map(name => <p>Hello { name }!</p>)
+  const sum = 5 + 3
 
-  //const arrayOfParagraphs = names.map(name => <Greeting nameToGreet={name}/>)
+  const toolList = [
+    {
+      id: 0,
+      text: "Copy",
+      large: true
+    },
+    {
+      id: 1,
+      text: "Cut",
+      large: false
+    },
+    {
+      id: 2,
+      text: "Paste",
+      humongous: true
+    },
+  ]
 
-  // arrayOfParagraphs = [
-  //   <p>Hello Abigail!</p>,
-  //   <p>Hello Derek!</p>
+  //const toolBarButtons = toolList.map(tool => <ToolbarButton text={tool.text} large={tool.large}/>)
+
+  // const toolBarButtons = [
+  //   <ToolbarButton text="Copy" large={true}/>,
+  //   <ToolbarButton text="Cut" large={false}/>,
+  //   <ToolbarButton text="Paste" large={true}/>
+  // ]
+
+  // const toolBarButtons = [
+  //   <div className="fs-3">Copy</div>,
+  //   <div>Cut</div>,
+  //   <div className="fs-3">Paste</div>
   // ]
 
   return (
     <div>
-      <h1 className="text-danger">App</h1>
-      <p className="green-text m-4">I'm the best.</p>
-
-      { names.map(name => <Greeting nameToGreet={name} key={name}/>) }
-
-      {/* <Greeting nameToGreet="Doug" color="green"/> */}
-      {/* <Greeting nameToGreet={ names[0] }/>
-      <Greeting nameToGreet={ names[1] }/>
-      <Greeting nameToGreet={ names[2] }/> */}
+      <div className="bg-primary text-white">
+        { toolList.map(tool => (
+          <ToolbarButton text={tool.hello} large={tool.humongous}/>
+        )) }
+        <SearchBar inputText="Search..."/>
+      </div>
+      Natalie's App
+      {p}
     </div>
   )
 }
 
+
 // props = {
-//   nameToGreet: "Natalie",
-//   color: "green"
+//   text: "Copy",
+//   large: true
 // }
-
-
 
 
 
@@ -66,13 +90,13 @@ export default function App() {
 // function isNotEmpty(paper) {
 //   return paper !== '';
 // }
-
 // const isNotEmpty = (paper) => {
 //   return paper !== '';
 // }
+// const isNotEmpty = paper => {
+//   return paper !== '';
+// }
+// const isNotEmpty = paper => paper !== ''
+// const isNotEmpty = p => p !== ''
 
-// const isNotEmpty = (paper) => paper !== '';
-
-// const isNotEmpty = paper => paper !== '';
-
-// const isNotEmpty = p => p !== '';
+// papers.filter(p => p !== '')
