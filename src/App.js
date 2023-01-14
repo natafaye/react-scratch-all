@@ -1,64 +1,112 @@
 import React, { useState } from 'react'
+import { Link, Route, Routes } from 'react-router-dom'
+import MenuItemPage from './MenuItemPage'
 import OrderMenu from './OrderMenu'
 import OrderView from './OrderView'
 
-export default function App() {
-  const [order, setOrder] = useState("tacos")
 
-  return (
-    <div>
-      <OrderView order={order} amount={5} toGo/>
-      <OrderMenu setOrder={setOrder}/>
-    </div>
-  )
+// export const useAlert = (message) => {
+//     alert(message);
+//     return "I did it"
+// }
+
+// NOT REAL, PRETEND
+// const useState = (initialValue) => {
+//     let state = initialValue;
+//     const setState = (newValue) => {
+//         state = newValue
+//     }
+//     return [state, setState]
+// }
+
+export default function App() {
+    // const [order, setOrder] = useState("none")
+    // const [toGo, setToGo] = useState(false)
+
+    const [orderInfo, setOrderInfo] = useState( { order: "non", toGo: false } )
+
+    return (
+        <div>
+            <h2>My app!</h2>
+            <ul>
+                <li><Link to="/view">View My Order</Link></li>
+                <li><Link to="/menu">Change My Order</Link></li>
+            </ul>
+            <Routes>
+                <Route path="/view" element={<OrderView orderInfo={orderInfo} />}/>
+                <Route path="/menu" element={<OrderMenu setOrderInfo={setOrderInfo} orderInfo={orderInfo}/>} />
+                <Route path="/menu/:menuItem" element={<MenuItemPage/>} />
+                {/* <Route path="/menu/burritos" element={<MenuItemPage menuItem="burritos"/>} />
+                <Route path="/menu/tacos" element={<MenuItemPage menuItem="tacos"/>} /> */}
+            </Routes>
+        </div>
+    )
 }
 
 
-// import { Card, CardImg, CardImgOverlay, CardTitle } from 'reactstrap';
-// import { Link } from 'react-router-dom';
-
-// const CampsiteCard = ({ campsite, setCampsites, campsites }) => {
-//     const { id, image, name } = campsite;
-
-//     const deleteCampsite = () => {
-//         setCampsites(campsites.filter(c => c.id !== id)) // set it to an array with this campsite missing
-//     }
-
-//     return (
-//         <Link to={`${id}`}>
-//             <Card>
-//                 <CardImg width='100%' src={image} alt={name} />
-//                 <CardImgOverlay>
-//                     <CardTitle>{name}</CardTitle>
-//                 </CardImgOverlay>
-//                 <button onClick={deleteCampsite}>Delete</button>
-//             </Card>
-//         </Link>
-//     );
-// };
-
-// export default CampsiteCard;
 
 
-// import { Col, Row } from 'reactstrap';
-// import CampsiteCard from './CampsiteCard';
-// import { selectAllCampsites } from './campsitesSlice';
 
-// const CampsitesList = () => {
-//     const [campsites, setCampsites] = useState(CAMPSITES)
 
-//     return (
-//         <Row className='ms-auto'>
-//             {campsites.map((campsite) => {
-//                 return (
-//                     <Col md='5' className='m-4' key={campsite.id}>
-//                         <CampsiteCard campsite={campsite} setCampsites={setCampsites} campsites={campsites} />
-//                     </Col>
-//                 );
-//             })}
-//         </Row>
-//     );
-// };
 
-// export default CampsitesList;
-      
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// function cookFoodInOven({ name }, settings, color) {
+//     return "Cooked " + color + " " + name + " cooked at " + settings.temperature
+// }
+
+// // function cookFoodInOven({ name }, { temperature, broil }, color) {
+// //     return "Cooked " + color + " " + name + " cooked at " + temperature
+// // }
+
+
+// const rice = { name: "Rice", type: "Basmati" }
+// cookFoodInOven(rice, { temperature: 300, broil: false }, "red")
+
+
+// //const food = rice;
+// const { name, type } = rice;
+
+
+// function getDinner() {
+//     return ["spaghetti", "broccoli"]
+// }
+
+// const foodArray = getDinner();
+// const goodBit = foodArray[0]
+// const grossBit = foodArray[1]
+
+// const [goodBit, grossBit] = getDinner()
