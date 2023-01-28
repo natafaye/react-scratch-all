@@ -1,7 +1,8 @@
 import React from 'react'
+import TodoList from './TodoList'
 
 export default function App() {
   return (
-    <div>App</div>
+    <div><TodoList/></div>
   )
 }
