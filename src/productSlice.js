@@ -1,106 +1,80 @@
-import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import { createAsyncThunk, createSlice } from "@reduxjs/toolkit"
 
-export const postProduct = createAsyncThunk(
-    'createTodo',
-    async (newProductData, { dispatch }) => {
-        const response = await fetch("http://localhost:3001/products", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(newProductData)
-        })
+// export const fetchProducts = () => async (dispatch) => {
+//     dispatch(loadProductsLoading())
+//     try {
+//       const response = await fetch("http://localhost:3001/products")
+//       // Only checks if we got a response from the backend and the backend says there was a problem
+//       if (!response.ok) {
+//         throw new Error(response.statusText)
+//       }
+//       const data = await response.json() // unsmooshes the data
+//       dispatch(loadProductsFulfilled(data))
+//     } catch (error) {
+//       // If we don't get a response from the backend
+//       dispatch(loadProductsFailed(error.message))
+//       return
+//     }
+// }
 
-        if (!response.ok) {
-            return Promise.reject(response.stateText)
-        }
-
-        const createdProduct = await response.json();
-
-        //return createdProduct
-        // OR DISPATCH YOURSELF:
-        dispatch(postProductSuccess(createdProduct))
+export const fetchProducts = createAsyncThunk("fetchProducts", async () => {
+    try {
+      const response = await fetch("http://localhost:3001/products")
+      // Only checks if we got a response from the backend and the backend says there was a problem
+      if (!response.ok) {
+        return Promise.reject(response.statusText)
+      }
+      const data = await response.json() // unsmooshes the data
+      return data
+    } catch (error) {
+      // If we don't get a response from the backend
+      return Promise.reject(error.message)
     }
-)
+})
 
 const productSlice = createSlice({
     name: "products",
     initialState: {
         productList: [],
-        loading: false,
-        errorMessage: null
+        errorMessage: null,
+        loading: false
     },
     reducers: {
-        // postProductStart: (state, action) => {
-        //     // when you start, set to true
-        //     state.loading = true;
-        // },
-        // postProductError: (state, action) => {
-        //     state.loading = false;
-        //     state.errorMessage = action.payload
-        // },
-        postProductSuccess: (state, action) => {
-            // Make change on frontend
-            // Make sure you give it the data from the backend, with the id on there
-            state.productList = [...state.productList, action.payload]
-
-            state.errorMessage = null;
-
-            // when you finish, set to false
-            state.loading = false;
+        loadProductsFulfilled: (state, action) => {
+            state.productList = action.payload
+            state.errorMessage = null
+            state.loading = false
         },
+        loadProductsFailed: (state, action) => {
+            state.errorMessage = action.payload
+            state.loading = false
+        },
+        loadProductsLoading: (state, action) => {
+            state.loading = true
+        },
+
+        deleteProduct: (state, action) => {
+            state.productList = state.productList.filter(product => product.id !== action.payload)
+        },
+        addProduct: (state, action) => {
+            state.productList.push(action.payload)
+        }
     },
     extraReducers: {
-        [postProduct.pending]: (state, action) => {
-            // when you start, set to true
-            state.loading = true;
+        [fetchProducts.fulfilled]: (state, action) => {
+            state.productList = action.payload
+            state.errorMessage = null
+            state.loading = false
         },
-        [postProduct.rejected]: (state, action) => {
-            state.loading = false;
+        [fetchProducts.failed]: (state, action) => {
             state.errorMessage = action.payload
+            state.loading = false
         },
-        // [postProduct.fulfilled]: (state, action) => {
-        //     // Make change on frontend
-        //     // Make sure you give it the data from the backend, with the id on there
-        //     state.productList = [...state.productList, action.payload]
-
-        //     state.errorMessage = null;
-
-        //     // when you finish, set to false
-        //     state.loading = false;
-        // },
+        [fetchProducts.pending]: (state, action) => {
+            state.loading = true
+        },
     }
 })
 
-export const { postProductStart, postProductError, postProductSuccess } = productSlice.actions;
 export const productReducer = productSlice.reducer
-
-
-
-// SAME AS ABOVE
-// export const postProduct = (newProductData) => async (dispatch) => {
-//     dispatch(postProductStart())
-
-//     // Make change on backend
-//     const response = await fetch("http://localhost:3001/products", {
-//         method: "POST",
-//         headers: { "Content-Type": "application/json" },
-//         body: JSON.stringify(newProductData)
-//     })
-
-//     if (!response.ok) {
-//         dispatch(postProductError(response.statusText))
-//         return;
-//     }
-
-//     const createdProduct = await response.json();
-
-
-//     dispatch(postProductSuccess(createdProduct))
-// }
-
-export const deleteProduct = (idToDelete) => async (dispatch, getState) => {
-    // TODO
-}
-
-export const fetchProducts = () => async (dispatch, getState) => {
-    // TODO
-}
+export const { deleteProduct, addProduct, loadProductsFulfilled, loadProductsFailed, loadProductsLoading } = productSlice.actions

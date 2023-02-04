@@ -1,39 +1,48 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { postProduct, deleteProduct, fetchProducts } from './productSlice'
+import { addProduct, deleteProduct, fetchProducts } from './productSlice'
 
 export default function App() {
-  // Get the data from redux
+  const dispatch = useDispatch()
+
   const productList = useSelector(state => state.products.productList)
-  const loading = useSelector(state => state.products.loading)
-  const errorMessage = useSelector(state => state.products.errorMessage)
 
-  const dispatch = useDispatch();
-
-  useEffect(() => {
+  const refreshProducts = async () => {
     dispatch(fetchProducts())
-  }, [])
-
-  const deleteProduct = async (idToDelete) => {
-    dispatch(deleteProduct(idToDelete))
   }
 
-  const createProduct = async (newProductData) => {
-    dispatch(postProduct(newProductData))
+  useEffect(() => {
+    refreshProducts()
+  }, [])
+
+  const handleDelete = (idToDelete) => {
+    // Dispatch the thunk (need to update to thunk)
+    dispatch(deleteProduct(idToDelete))
+
+    // TODO: Move into Redux Async Thunk
+    fetch("http://localhost:3001/products/" + idToDelete, { method: "DELETE" })
+  }
+
+  const handleCreate = async (newProductData) => {
+    // TODO: Move into Redux Async Thunk
+    const response = await fetch("http://localhost:3001/products", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(newProductData)
+    })
+    const newProductWithId = await response.json()
+    
+    // Dispatch the thunk (need to update to thunk)
+    dispatch(addProduct(newProductWithId))
   }
 
   return (
-    <div className="m-5">
-      <h2>App</h2>
-      <button className="btn btn-primary mb-4" disabled={loading} onClick={() => createProduct( { name: "Cake", price: 20 } )}>
-        { loading ? "Submitting..." : "Create Cake Product" }
-      </button>
-      { (loading) ? <p>Loading...</p> : null }
-      { (errorMessage) ? <p className="alert alert-danger">{ errorMessage }</p> : null }
+    <div>
+      <button className="btn btn-success m-3" onClick={() => handleCreate({ name: "Cheese", price: 2000})}>Add Product</button>
       <ul className="list-group">
         {productList.map(product => (
-          <li className="list-group-item" key={product.id}>
-            <button className="btn btn-danger me-2" disabled={loading} onClick={() => deleteProduct(product.id)}>Delete</button>
+          <li key={product.id} className="list-group-item">
+            <button className="btn btn-danger me-2" onClick={() => handleDelete(product.id)}>Delete</button>
             {product.name}
           </li>
         ))}
