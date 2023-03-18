@@ -1,75 +1,42 @@
 import React from 'react'
-import SearchBar from './SearchBar'
+import Toolbar from './Toolbar'
 import ToolbarButton from './ToolbarButton'
 
 export default function App() {
-  const p = <p>I'm a paragraph {5 + 3}</p>
-
-  const sum = 5 + 3
-
-  const toolList = [
-    {
-      id: 0,
-      text: "Copy",
-      large: true
-    },
-    {
-      id: 1,
-      text: "Cut",
-      large: false
-    },
-    {
-      id: 2,
-      text: "Paste",
-      humongous: true
-    },
-  ]
-
-  //const toolBarButtons = toolList.map(tool => <ToolbarButton text={tool.text} large={tool.large}/>)
-
-  // const toolBarButtons = [
-  //   <ToolbarButton text="Copy" large={true}/>,
-  //   <ToolbarButton text="Cut" large={false}/>,
-  //   <ToolbarButton text="Paste" large={true}/>
-  // ]
-
-  // const toolBarButtons = [
-  //   <div className="fs-3">Copy</div>,
-  //   <div>Cut</div>,
-  //   <div className="fs-3">Paste</div>
-  // ]
-
+  const name = "Natalie"
+  const paragraph = <p>{ 2 + 2 }</p>
+  const number = 1 + 3
   return (
     <div>
-      <div className="bg-primary text-white">
-        { toolList.map(tool => (
-          <ToolbarButton text={tool.hello} large={tool.humongous}/>
-        )) }
-        <SearchBar inputText="Search..."/>
-      </div>
-      Natalie's App
-      {p}
+      <Toolbar/>
+      { paragraph }
+      <Option dish={{ title: "fdsfsd", price: 9 }}/>
+      <ul>
+        <li>{5 + 3}</li>
+      </ul>
     </div>
   )
 }
 
+function Menu() {
+  return (
+    <Option 
+      dish={{ 
+        title: "Spaghetti", 
+        price: 9 
+      }}
+    />
+  )
+}
 
-// props = {
-//   text: "Copy",
-//   large: true
-// }
-
-
-
-
-
-
-
-
-
-
-
-
+const Option = (props) => {
+  return (
+    <div>
+      ${ props.dish.price } 
+      - { props.dish.title }
+    </div>
+  )
+}
 
 
 
@@ -90,13 +57,19 @@ export default function App() {
 // function isNotEmpty(paper) {
 //   return paper !== '';
 // }
+
+// // Changed to an arrow function
 // const isNotEmpty = (paper) => {
 //   return paper !== '';
 // }
+
+// // Can get rid of parenthesis if we have exactly one parameter
 // const isNotEmpty = paper => {
 //   return paper !== '';
 // }
-// const isNotEmpty = paper => paper !== ''
-// const isNotEmpty = p => p !== ''
 
-// papers.filter(p => p !== '')
+// // Can get rid of the curly brackets if we have exactly one line inside them
+// const isNotEmpty = paper => paper !== ''
+
+// // Can get rid of the curly brackets if we have exactly one line inside them
+// const isNotEmpty = p => p !== ''

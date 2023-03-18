@@ -1,16 +1,7 @@
 import React from 'react'
 
-const ToolbarButton = (props) => {
-    let divClass = ""
-    if(props.large) {
-        divClass="fs-3"
-    }
-    return <div className={divClass}>{props.text}</div>
+export default function ToolbarButton(props) {
+  return (
+    <button className="btn btn-outline-secondary me-2" onClick={ props.onClick }>{ props.text }</button>
+  )
 }
-
-// props = {
-//     text: "Copy",
-//     large: true
-// }
-
-export default ToolbarButton
