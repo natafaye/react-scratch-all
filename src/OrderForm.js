@@ -1,115 +1,79 @@
-import { ErrorMessage, Field, Form, Formik } from 'formik'
+import { Field, Form, Formik } from 'formik'
 import React from 'react'
-import { useState } from 'react'
 
-// Formik
-export default function OrderForm({ setOrder }) {
+// FORMIK
 
-    const save = (formValues) => {
-        const newOrder = {
-            name: formValues.name,
-            dish: formValues.dish
-        }
-        setOrder(newOrder)
+export default function OrderForm({ onOrder }) {
+    const handleSubmit = (formValues) => {
+        onOrder(formValues)
     }
 
-    const validate = (formValues) => {
-        // return {
-        //     dish: "That's no good"
-        // }
-        return { }
-    }
-
-    // Each input needs to have the value and the onChange set up
     return (
-        <Formik initialValues={{ name: "", dish: "" }} onSubmit={save} validate={validate}>
+        <Formik initialValues={{ main: "", side: "fries" }} onSubmit={handleSubmit}>
             <Form>
-                Name: <Field type="text" name="name" />
-                <ErrorMessage name="name">
-                    { (msg) => <p>{msg}</p> }
-                </ErrorMessage>
-                Dish: <Field type="text" name="dish" />
-                <ErrorMessage name="dish">
-                    { (msg) => <p className="alert alert-danger">{msg}</p> }
-                </ErrorMessage>
-                <button type="submit">Update Order!</button>
+                <label>Main</label>
+                <Field type="text" name="main" />
+                <label>Side</label>
+                <Field as="select" name="side">
+                    <option value="potatoes">Mashed Potatoes</option>
+                    <option value="fries">Fries</option>
+                </Field>
+                <button>Submit</button>
             </Form>
         </Formik>
     )
 }
 
 
-// Normal React Form with One Piece of State
-// export default function OrderForm({ setOrder }) {
-//     const initialValues = { name: "", dish: "" }
+// ONE PIECE OF STATE
 
-//     const save = (event) => {
-//         event.preventDefault() // please don't refresh the page
-//         const newOrder = {
-//             name: formValues.name,
-//             dish: formValues.dish
-//         }
-//         //console.log("New order:", newOrder)
-//         setOrder(newOrder)
-//     }
+// export default function OrderForm({ onOrder }) {
+//     const [formValues, setFormValues] = useState({ main: "", side: "fries"})
 
-
-
-
-// IDENTICAL FOR ANY FORM
-
-//     // State for tracking the in-progress form data
-//     const [formValues, setFormValues] = useState(initialValues)
-
-//     // Event handler functions that keep the piece of state and the inputs completely in sync
 //     const handleChange = (event) => setFormValues({ ...formValues, [event.target.name]: event.target.value })
 
+//     const handleSubmit = (event) => {
+//         event.preventDefault()
+//         onOrder(formValues)
+//     }
 
-
-
-//     // Each input needs to have the value and the onChange set up
 //     return (
 //         <form>
-//             Name: <input type="text" name="name" value={formValues.name} onChange={handleChange}/>
-//             Dish: <input type="text" name="dish" value={formValues.dish} onChange={handleChange}/>
-//             <button onClick={save}>Update Order!</button>
+//             <label>Main</label>
+//             <input type="text" name="main" value={formValues.main} onChange={handleChange} />
+//             <label>Side</label>
+//             <select name="side" value={formValues.side} onChange={handleChange}>
+//                 <option value="potatoes">Mashed Potatoes</option>
+//                 <option value="fries">Fries</option>
+//             </select>
+//             <button onClick={handleSubmit}>Submit</button>
 //         </form>
 //     )
 // }
 
 
-// Normal React Form with Multiple Pieces of State
 
-// export default function OrderForm({ setOrder }) {
-//     // State for tracking the in-progress form data
-//     const [nameValue, setNameValue] = useState("")
-//     const [dishValue, setDishValue] = useState("")
+// MULTIPLE PIECES OF STATE
 
-//     // Event handler functions that keep the piece of state and the inputs completely in sync
-//     const handleNameChange = (event) => {
-//         setNameValue(event.target.value)
+// export default function OrderForm({ onOrder }) {
+//     const [mainValue, setMainValue] = useState("")
+//     const [sideValue, setSideValue] = useState("fries")
+
+//     const handleSubmit = (event) => {
+//         event.preventDefault()
+//         onOrder({ main: mainValue, side: sideValue })
 //     }
 
-//     const handleDishChange = (event) => {
-//         setDishValue(event.target.value)
-//     }
-
-//     const save = (event) => {
-//         event.preventDefault() // please don't refresh the page
-//         const newOrder = {
-//             name: nameValue,
-//             dish: dishValue
-//         }
-//         //console.log("New order:", newOrder)
-//         setOrder(newOrder)
-//     }
-
-//     // Each input needs to have the value and the onChange set up
 //     return (
 //         <form>
-//             Name: <input type="text" value={nameValue} onChange={handleNameChange}/>
-//             Dish: <input type="text" value={dishValue} onChange={handleDishChange}/>
-//             <button onClick={save}>Update Order!</button>
+//             <label>Main</label>
+//             <input type="text" value={mainValue} onChange={(event) => setMainValue(event.target.value)} />
+//             <label>Side</label>
+//             <select value={sideValue} onChange={(event) => setSideValue(event.target.value)}>
+//                 <option value="potatoes">Mashed Potatoes</option>
+//                 <option value="fries">Fries</option>
+//             </select>
+//             <button onClick={handleSubmit}>Submit</button>
 //         </form>
 //     )
 // }
