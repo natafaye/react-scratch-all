@@ -26,7 +26,7 @@ export default function App() {
   };
 
   return (
-    <div>
+    <div className="m-3 w-50">
       <ChannelForm addChannel={addChannel} />
       <hr />
       <ChannelList
