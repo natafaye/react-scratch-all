@@ -1,52 +1,114 @@
-import React, { useEffect } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
-import { addProduct, deleteProduct, fetchProducts } from './productSlice'
+import React from 'react'
+import { useEffect } from 'react'
+import { useState } from 'react'
 
 export default function App() {
-  const dispatch = useDispatch()
+    const [productList, setProductList] = useState([])
+    const [errorMessage, setErrorMessage] = useState(null)
+    const [loading, setLoading] = useState(false)
 
-  const productList = useSelector(state => state.products.productList)
+    useEffect(() => {
+        const getProducts = async () => {
+            setLoading(true)
 
-  const refreshProducts = async () => {
-    dispatch(fetchProducts())
-  }
+            let data;
+            let errorMessage = null
+            try {
+                const response = await fetch("http://localhost:3004/products")
 
-  useEffect(() => {
-    refreshProducts()
-  }, [])
+                if (!response.ok) {
+                    errorMessage = "Error: " + response.statusText
+                }
 
-  const handleDelete = (idToDelete) => {
-    // Dispatch the thunk (need to update to thunk)
-    dispatch(deleteProduct(idToDelete))
+                data = await response.json()
+            } catch (error) {
+                errorMessage = "Error: " + error.message
+            }
 
-    // TODO: Move into Redux Async Thunk
-    fetch("http://localhost:3001/products/" + idToDelete, { method: "DELETE" })
-  }
+            if(!errorMessage) {
+                setProductList(data)
+                setErrorMessage(null)
+                setLoading(false)
+            } else {
+                setErrorMessage(errorMessage)
+                setLoading(false)
+            }
+            
+        }
+        getProducts()
+    }, [])
 
-  const handleCreate = async (newProductData) => {
-    // TODO: Move into Redux Async Thunk
-    const response = await fetch("http://localhost:3001/products", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(newProductData)
-    })
-    const newProductWithId = await response.json()
-    
-    // Dispatch the thunk (need to update to thunk)
-    dispatch(addProduct(newProductWithId))
-  }
+    const deleteProduct = async (idToDelete) => {
+        // PENDING
+        setLoading(true)
 
-  return (
-    <div>
-      <button className="btn btn-success m-3" onClick={() => handleCreate({ name: "Cheese", price: 2000})}>Add Product</button>
-      <ul className="list-group">
-        {productList.map(product => (
-          <li key={product.id} className="list-group-item">
-            <button className="btn btn-danger me-2" onClick={() => handleDelete(product.id)}>Delete</button>
-            {product.name}
-          </li>
-        ))}
-      </ul>
-    </div>
-  )
+        // THUNK
+        let errorMessage = null
+        try {
+            const response = await fetch("http://localhost:3004/products/" + idToDelete, {
+                method: "DELETE"
+            })
+
+            if (!response.ok) {
+                errorMessage = "Error: " + response.statusText
+            }
+        } catch (error) {
+            errorMessage = "Error: " + error.message
+        }
+
+        if(!errorMessage) {
+            // FULFILLED
+            setProductList(productList.filter(product => product.id !== idToDelete))
+            setErrorMessage(null)
+            setLoading(false)
+        } else {
+            // REJECTED
+            setErrorMessage(errorMessage)
+            setLoading(false)
+        }
+    }
+
+    const addProduct = (newProduct) => {
+        // Make the change on the backend
+        fetch("http://localhost:3004/products", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(newProduct)
+        })
+
+
+        // Make the change on the frontend
+        setProductList(productList.concat(newProduct))
+
+
+        if(!errorMessage) {
+            // Make the change on the frontend
+            setProductList(productList.concat(newProduct))
+            setErrorMessage(null)
+            setLoading(false)
+
+            // redirect to a submitted page
+            // set a piece of state that says that it was all good
+            // set a successful piece of state to true
+        } else {
+            setErrorMessage(errorMessage)
+            setLoading(false)
+        }
+
+    }
+
+    return (
+        <div className="m-5">
+            { errorMessage ? <p className="text-danger">{errorMessage}</p> : null }
+            { loading ? <p className="text-muted">Loading...</p> : null }
+            <ul className="list-group">
+                {productList.map(product => (
+                    <li className="list-group-item" key={product.id}>
+                        {product.name}
+                        <button className="btn btn-danger" disabled={loading} onClick={() => deleteProduct(product.id)}>Delete</button>
+                    </li>
+                ))}
+            </ul>
+        </div>
+    )
 }
