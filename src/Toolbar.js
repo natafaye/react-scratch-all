@@ -1,28 +1,30 @@
 import React from 'react'
 import ToolbarButton from './ToolbarButton'
 
+const toolbarButtons = [
+    {
+        id: 0,
+        text: "Shape",
+        color: "primary"
+    },
+    {
+        id: 1,
+        text: "Paint",
+        color: "danger"
+    },
+    {
+        id: 3,
+        text: "Text",
+        color: "primary"
+    },
+]
+
+// [<ToolbarButton buttonText="Color"/>, <ToolbarButton buttonText="Shape"/>, <ToolbarButton buttonText="Select"/>]
+
 export default function Toolbar() {
-    const toolbarButtons = [
-        {
-            text: "Undo",
-            action: () => console.log("Undo!")
-        },
-        {
-            text: "Redo",
-            action: () => console.log("Redo!")
-        },
-        {
-            text: "Print",
-            action: () => console.log("Print!")
-        }
-    ]
     return (
         <div>
-            {/* <ToolbarButton text="Undo" onClick={ () => console.log("Undo!") }/>
-            <ToolbarButton text="Redo" onClick={ () => console.log("Redo!") }/>
-            <ToolbarButton text="Print" onClick={ () => console.log("Print!") }/> */}
-
-            { toolbarButtons.map( button => <ToolbarButton key={button.text} text={button.text} onClick={button.action}/> ) }
+            { toolbarButtons.map(toolbarButton => <ToolbarButton buttonInfo={toolbarButton} key={toolbarButton.id}/>) }
         </div>
     )
 }

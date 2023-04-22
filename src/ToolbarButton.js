@@ -1,7 +1,9 @@
 import React from 'react'
 
 export default function ToolbarButton(props) {
-  return (
-    <button className="btn btn-outline-secondary me-2" onClick={ props.onClick }>{ props.text }</button>
-  )
+    return (
+        <button className={"btn btn-" + props.buttonInfo.color}>
+            { props.buttonInfo.text }
+        </button>
+    )
 }
