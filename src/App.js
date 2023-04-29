@@ -1,70 +1,88 @@
 import React, { useState } from 'react'
-import { Route, Routes } from 'react-router'
-import HomePage from './HomePage'
+import Sidebar from './Sidebar'
+import ProductList from './ProductList'
 import ProductPage from './ProductPage'
-import ShopPage from './ShopPage'
+import { Route, Routes } from 'react-router'
+
+// Doesn't need to be in state
+const STATUS_OPTIONS = ["out", "low", "stocked", "fully-stocked"]
 
 export default function App() {
-    let [productList, setProductList] = useState([]) // userName = "Zander", setUserName = function
+    const [productList, setProductList] = useState([
+        {
+            id: 0,
+            title: "Eggs",
+            status: "low"
+        },
+        {
+            id: 1,
+            title: "Cheese",
+            status: "fully-stocked"
+        },
+    ])
 
-    const handleClick = () => {
-        // productList.push("Chair") // DON'T DO THIS
+    const addProduct = () => {
+        const newProduct = {
+            id: 2,
+            title: "Milk"
+        }
 
+        // BAD: Updating state directly
+        //productList.push(newProduct)
+
+        // GOOD: Work off copies
         // const copyOfProductList = productList.slice()
-        // copyOfProductList.push("Chair")
+        // copyOfProductList.push(newProduct)
         // setProductList(copyOfProductList)
 
-        setProductList(productList.concat("Chair"))
+        // GREAT: Work off copies
+        setProductList(productList.concat(newProduct))
+
+        // GREAT: We'll learn this next week
+        //setProductList([...productList, newProduct])
     }
 
-    const products = ["Hat", "Shoe", "Pants"]
+    const deleteProduct = (idToDelete) => {
+        setProductList(productList.filter(product => product.id !== idToDelete))
+    }
+
+    const setProductToFullyStocked = (idToUpdate) => {
+        setProductList(productList.map(product =>
+            (product.id === idToUpdate) ? // if it's the one we want to update
+                { ...product, status: "fully-stocked" } : // a copy with the status updated
+                product // the original product unchanged
+        ))
+
+    }
 
     return (
-        <div className="app">
-            <h1>{productList.join(", ")}</h1>
-            <button onClick={handleClick}>Click me to change the name</button>
+        <div>
+            App
+            <Sidebar backgroundColor="dark" links={["general", "something"]} />
             <Routes>
-                <Route path="/" element={<HomePage />} />
-                <Route path="/shop" element={<ShopPage />} />
-                <Route path="/shop/:name" element={<ProductPage />} />
+                <Route path="/" element={<ProductList productList={productList} addProduct={addProduct} deleteProduct={deleteProduct} setProductToFullyStocked={setProductToFullyStocked}/>} />
+                <Route path="/products/:productId" element={<ProductPage productList={productList} />}/>
             </Routes>
-            <Button text="Submit" size={3} />
+            
         </div>
     )
 }
 
-function Button({ size, text }) {
-    return (
-        <button className={"b-" + size}>{text}</button>
-    )
-}
+
+// const products = [ { id: 0, title: "Hat"}, { id: 1, title: "Shoes"} ]
+
+// products.filter(  product => product.title === "Hat" ).map(  product => product.title ).filter(productTitle => productTitle.length > 5 )
+
+// const numbers = [0, 1, 2, 3, 4]
+// const evenNumbers = numbers.filter( number => number % 2 === 0)
 
 
-// const getFood = () => {
-//     return ["burrito", "cookie"]
+// function getFood() {
+//     return ["spaghetti", "meatballs"]
 // }
 
+// // const myFood = getFood()
+// // const boringPart = myFood[0]
+// // const excitingPart = myFood[1]
 
-
-// const [meal, dessert] = getFood()
-
-// value = false
-
-// function useState(initialValue) { // initialValue = false
-//     let value = initialValue // or previous value
-//     const setValue = (newValue) => { value = newValue }
-//     return [false, (newValue) => { value = newValue }]
-// }
-
-// const valueAndSetter = [false, (newValue) => { value = newValue }]
-// const show = false
-// const setShow = (newValue) => { value = newValue }
-
-// const onClick = () => {
-//     setShow(true)
-// }
-
-// return (
-//     <div>{ show }</div>
-// )
-
+// const [boringPart, excitingPart] = getFood()

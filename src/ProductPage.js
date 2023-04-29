@@ -1,21 +1,17 @@
-import { Link, useParams, useNavigate } from 'react-router-dom'
+import React from 'react'
+import { useParams } from 'react-router'
 
-export default function ProductPage() {
-  const { name } = useParams()
+export default function ProductPage({ productList }) {
+    
+    let { productId } = useParams()
+    productId = parseInt(productId)
 
-  const navigate = useNavigate()
+    const product = productList.find(product => product.id === productId)
 
-  const handleBuy = () => {
-    alert("Too bad, you can't! Go home instead")
-    navigate("/")
-  }
-
-  return (
-    <>
-      <h1>Product Name: { name }</h1>
-      <button onClick={handleBuy}>Buy</button>
-      <Link to="/shop">Back to Shop</Link>
-    </>
-  )
+    return (
+        <div>
+            <h1>{product.title}</h1>
+            <p>{product.status}</p>
+        </div>
+    )
 }
-

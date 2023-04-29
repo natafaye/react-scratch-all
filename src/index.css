@@ -28,3 +28,7 @@ code {
 .b-3 {
   font-size: 3rem
 }
+
+a.active {
+  color: green
+}
