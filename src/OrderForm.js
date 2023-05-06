@@ -1,79 +1,101 @@
 import { Field, Form, Formik } from 'formik'
 import React from 'react'
+import { useState } from 'react'
 
-// FORMIK
+export default function OrderForm({ onSubmit }) {
 
-export default function OrderForm({ onOrder }) {
-    const handleSubmit = (formValues) => {
-        onOrder(formValues)
+    const handleSubmit = (values) => {
+        const newOrder = {
+            name: values.name,
+            entree: values.entree
+        }
+        onSubmit(newOrder)
     }
 
     return (
-        <Formik initialValues={{ main: "", side: "fries" }} onSubmit={handleSubmit}>
+        <Formik onSubmit={handleSubmit} initialValues={{
+            name: "Natalie",
+            entree: "tacos"
+        }}>
             <Form>
-                <label>Main</label>
-                <Field type="text" name="main" />
-                <label>Side</label>
-                <Field as="select" name="side">
-                    <option value="potatoes">Mashed Potatoes</option>
-                    <option value="fries">Fries</option>
+                <label>Name</label>
+                <Field type="text" name="name"/>
+                <label>Entree</label>
+                <Field as="select" name="entree">
+                    <option value="tacos">Tacos</option>
+                    <option value="burritos">Burritos</option>
+                    <option value="fajitas">Fajitas</option>
                 </Field>
-                <button>Submit</button>
+                <button>Submit Order</button>
             </Form>
         </Formik>
     )
 }
 
 
-// ONE PIECE OF STATE
+// FORM WITH ONE PIECE OF STATE
 
-// export default function OrderForm({ onOrder }) {
-//     const [formValues, setFormValues] = useState({ main: "", side: "fries"})
+// export default function OrderForm({ onSubmit }) {
+//     const [formValues, setFormValues] = useState({
+//         name: "Natalie",
+//         entree: "tacos"
+//     })
 
-//     const handleChange = (event) => setFormValues({ ...formValues, [event.target.name]: event.target.value })
+//     const handleChange = (event) => setFormValues({ ...formValues, [ event.target.name ]: event.target.value })
 
 //     const handleSubmit = (event) => {
 //         event.preventDefault()
-//         onOrder(formValues)
+//         const newOrder = {
+//             name: formValues.name,
+//             entree: formValues.entree
+//         }
+//         onSubmit(newOrder)
 //     }
 
 //     return (
-//         <form>
-//             <label>Main</label>
-//             <input type="text" name="main" value={formValues.main} onChange={handleChange} />
-//             <label>Side</label>
-//             <select name="side" value={formValues.side} onChange={handleChange}>
-//                 <option value="potatoes">Mashed Potatoes</option>
-//                 <option value="fries">Fries</option>
+//         <form onSubmit={handleSubmit}>
+//             <label>Name</label>
+//             <input type="text" value={formValues.name} name="name" onChange={handleChange} />
+//             <label>Entree</label>
+//             <select value={formValues.entree} name="entree" onChange={handleChange}>
+//                 <option value="tacos">Tacos</option>
+//                 <option value="burritos">Burritos</option>
+//                 <option value="fajitas">Fajitas</option>
 //             </select>
-//             <button onClick={handleSubmit}>Submit</button>
+//             <button>Submit Order</button>
 //         </form>
 //     )
 // }
 
+// FORM WITH MULTIPLE PIECES OF STATE
 
+// export default function OrderForm({ onSubmit }) {
+//     const [nameValue, setNameValue] = useState("Natalie")
+//     const [entreeValue, setEntreeValue] = useState("tacos")
 
-// MULTIPLE PIECES OF STATE
-
-// export default function OrderForm({ onOrder }) {
-//     const [mainValue, setMainValue] = useState("")
-//     const [sideValue, setSideValue] = useState("fries")
+//     const handleNameChange = (event) => setNameValue(event.target.value) // event = object with info, event.target = the input, event.target.value = the value in the input
+//     const handleEntreeChange = (event) => setEntreeValue(event.target.value)
 
 //     const handleSubmit = (event) => {
-//         event.preventDefault()
-//         onOrder({ main: mainValue, side: sideValue })
+//         event.preventDefault() // please don't refresh the page gosh dang it
+//         const newOrder = {
+//             name: nameValue,
+//             entree: entreeValue
+//         }
+//         onSubmit(newOrder)
 //     }
 
 //     return (
-//         <form>
-//             <label>Main</label>
-//             <input type="text" value={mainValue} onChange={(event) => setMainValue(event.target.value)} />
-//             <label>Side</label>
-//             <select value={sideValue} onChange={(event) => setSideValue(event.target.value)}>
-//                 <option value="potatoes">Mashed Potatoes</option>
-//                 <option value="fries">Fries</option>
+//         <form onSubmit={handleSubmit}>
+//             <label>Name</label>
+//             <input type="text" value={nameValue} onChange={handleNameChange} />
+//             <label>Entree</label>
+//             <select value={entreeValue} onChange={handleEntreeChange}>
+//                 <option value="tacos">Tacos</option>
+//                 <option value="burritos">Burritos</option>
+//                 <option value="fajitas">Fajitas</option>
 //             </select>
-//             <button onClick={handleSubmit}>Submit</button>
+//             <button>Submit Order</button>
 //         </form>
 //     )
 // }
