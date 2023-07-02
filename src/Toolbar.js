@@ -1,30 +1,39 @@
-import React from 'react'
-import ToolbarButton from './ToolbarButton'
+import ToolbarButton from "./ToolbarButton"
 
-const toolbarButtons = [
-    {
-        id: 0,
-        text: "Shape",
-        color: "primary"
-    },
-    {
-        id: 1,
-        text: "Paint",
-        color: "danger"
-    },
-    {
-        id: 3,
-        text: "Text",
-        color: "primary"
-    },
-]
+export default function Toolbar(props) {
 
-// [<ToolbarButton buttonText="Color"/>, <ToolbarButton buttonText="Shape"/>, <ToolbarButton buttonText="Select"/>]
+    const toolbarButtons = [
+        {
+            id: 0,
+            text: "Undo"
+        },
+        {
+            id: 1,
+            text: "Redo"
+        },
+        {
+            id: 2,
+            text: "Print",
+            hasDropdown: false
+        },
+    ]
 
-export default function Toolbar() {
+    // [
+    //     <ToolbarButton text="Undo"/>,
+    //     <ToolbarButton text="Redo"/>,
+    //     <ToolbarButton text="Print"/>
+    // ]
+
+    let className = "p-4 "
+    if (props.dark) {
+        className += "bg-dark text-white"
+    } else {
+        className += "bg-light"
+    }
+    
     return (
-        <div>
-            { toolbarButtons.map(toolbarButton => <ToolbarButton buttonInfo={toolbarButton} key={toolbarButton.id}/>) }
+        <div className={className}>
+            { toolbarButtons.map( button => <ToolbarButton key={button.id} buttonData={button} /> ) }
         </div>
     )
 }
