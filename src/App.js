@@ -4,6 +4,7 @@ import TodoList from "./TodoList";
 import AddTodoForm from "./AddTodoForm";
 import { Link, Route, Routes } from "react-router-dom";
 import TodoPage from "./TodoPage";
+import PriorityPage from "./PriorityPage";
 
 // LIKES PIECE OF STATE = 2
 
@@ -81,6 +82,7 @@ export default function App() {
         <Route path="/todos" element={<TodoList todos={todos} updateTodoPriority={updateTodoPriority} deleteTodo={deleteTodo} />} />
         <Route path="/todos/add" element={<AddTodoForm addTodo={addTodo} />} />
         <Route path="/todos/:todoId" element={<TodoPage todos={todos} />}/>
+        <Route path="/todos/priority/:priority/:mode" element={<PriorityPage todos={todos} updateTodoPriority={updateTodoPriority} deleteTodo={deleteTodo} />}/>
 
         {/* Not the most common, but you can */}
         <Route path="/likestuff" element={

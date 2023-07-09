@@ -1,20 +1,21 @@
+
 import { Link } from "react-router-dom";
+import TodoCard from "./TodoCard";
 
 export default function TodoList({ todos, deleteTodo, updateTodoPriority }) {
 
     return (
         <>
-            
-            <ul>{todos.map(todo => (
-                <li key={todo.id}>
-                    {todo.text} - {todo.priority}
-                    <button onClick={() => deleteTodo(todo.id)}>Delete</button>
-                    <button onClick={() => updateTodoPriority(todo.id, 1)}>1</button>
-                    <button onClick={() => updateTodoPriority(todo.id, 2)}>2</button>
-                    <button onClick={() => updateTodoPriority(todo.id, 3)}>3</button>
-                    <Link to={`/todos/${todo.id}`}>Details</Link>
-                </li>
-            ))}</ul>
+            <p>
+                <Link to="/todos/priority/1/dark">Priority 1</Link><br />
+                <Link to="/todos/priority/2/light">Priority 2</Link><br />
+                <Link to="/todos/priority/3/light">Priority 3</Link><br />
+            </p>
+            <ul>
+                {todos.map(todo => (
+                    <TodoCard key={todo.id} todo={todo} deleteTodo={deleteTodo} updateTodoPriority={updateTodoPriority} />
+                ))}
+            </ul>
         </>
     )
 }
