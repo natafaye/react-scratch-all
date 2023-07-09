@@ -1,88 +1,121 @@
-import React, { useState } from 'react'
-import Sidebar from './Sidebar'
-import ProductList from './ProductList'
-import ProductPage from './ProductPage'
-import { Route, Routes } from 'react-router'
+import { useState } from "react";
+import MessageCard from "./MessageCard";
+import TodoList from "./TodoList";
+import AddTodoForm from "./AddTodoForm";
+import { Link, Route, Routes } from "react-router-dom";
+import TodoPage from "./TodoPage";
 
-// Doesn't need to be in state
-const STATUS_OPTIONS = ["out", "low", "stocked", "fully-stocked"]
+// LIKES PIECE OF STATE = 2
 
 export default function App() {
-    const [productList, setProductList] = useState([
-        {
-            id: 0,
-            title: "Eggs",
-            status: "low"
-        },
-        {
-            id: 1,
-            title: "Cheese",
-            status: "fully-stocked"
-        },
-    ])
+  const [likes, setLikes] = useState(0) // either gets the initial value or the previous value
 
-    const addProduct = () => {
-        const newProduct = {
-            id: 2,
-            title: "Milk"
-        }
+  const [todos, setTodos] = useState([{ id: 0, text: "Laundry", priority: 3 }]) // test data
 
-        // BAD: Updating state directly
-        //productList.push(newProduct)
+  const deleteTodo = (idToDelete) => {
+    // Good
+    // const copyOfTodos = todos.slice()
+    // const indexToDelete = todos.findIndex(todo => todo.id === idToDelete)
+    // copyOfTodos.splice(indexToDelete, 1)
+    // setTodos(copyOfTodos)
 
-        // GOOD: Work off copies
-        // const copyOfProductList = productList.slice()
-        // copyOfProductList.push(newProduct)
-        // setProductList(copyOfProductList)
+    // Fantastic
+    setTodos(todos.filter(todo => todo.id !== idToDelete))
+  }
 
-        // GREAT: Work off copies
-        setProductList(productList.concat(newProduct))
+  const updateTodoPriority = (idToUpdate, newPriority) => {
+    // Good
+    // const copyOfTodoList = todos.slice()
+    // const indexToUpdate = todos.findIndex(todo => todo.id === idToUpdate)
+    // const copyOfTodo = { ...todos[indexToUpdate] } // trust this makes a copy
+    // copyOfTodo.priority = newPriority
+    // copyOfTodoList[indexToUpdate] = copyOfTodo
+    // setTodos(copyOfTodoList)
 
-        // GREAT: We'll learn this next week
-        //setProductList([...productList, newProduct])
-    }
+    // Fantastic
+    setTodos(todos.map(todo =>
+      (todo.id === idToUpdate) ?
+        { ...todo, priority: newPriority } :
+        todo
+    ))
 
-    const deleteProduct = (idToDelete) => {
-        setProductList(productList.filter(product => product.id !== idToDelete))
-    }
+  }
 
-    const setProductToFullyStocked = (idToUpdate) => {
-        setProductList(productList.map(product =>
-            (product.id === idToUpdate) ? // if it's the one we want to update
-                { ...product, status: "fully-stocked" } : // a copy with the status updated
-                product // the original product unchanged
-        ))
+  const addTodo = () => {
+    const newTodo = { id: 1, text: "Taxes", priority: 1 }
 
-    }
+    // BLASPHEMY
+    //todos.push(newTodo)
 
-    return (
-        <div>
-            App
-            <Sidebar backgroundColor="dark" links={["general", "something"]} />
-            <Routes>
-                <Route path="/" element={<ProductList productList={productList} addProduct={addProduct} deleteProduct={deleteProduct} setProductToFullyStocked={setProductToFullyStocked}/>} />
-                <Route path="/products/:productId" element={<ProductPage productList={productList} />}/>
-            </Routes>
-            
-        </div>
-    )
+    // Work off copies
+
+    // Good
+    // const copyOfTodos = todos.slice()
+    // copyOfTodos.push(newTodo)
+    // setTodos(copyOfTodos)
+
+    // Fantastic
+    setTodos(todos.concat(newTodo))
+  }
+
+  const doSomething = (name) => {
+    console.log(name + " did it")
+  }
+
+  const likeIt = () => {
+    // BLASPHEMY
+    // No updating state directly
+    // likes++
+
+    // MUST GO THROUGH SETTING FUNCTION
+    setLikes(likes + 1)
+  }
+
+  return (
+    <div>
+      <Link to="/todos">Todos</Link><br/>
+      <Link to="/todos/add">Add</Link><br/>
+      <Link to="/likestuff">Like Stuff</Link><br/>
+
+      <Routes>
+        <Route path="/todos" element={<TodoList todos={todos} updateTodoPriority={updateTodoPriority} deleteTodo={deleteTodo} />} />
+        <Route path="/todos/add" element={<AddTodoForm addTodo={addTodo} />} />
+        <Route path="/todos/:todoId" element={<TodoPage todos={todos} />}/>
+
+        {/* Not the most common, but you can */}
+        <Route path="/likestuff" element={
+          <>
+            <p>{likes} Likes</p>
+            <button onClick={likeIt}>Like</button>
+            <MessageCard number={getNumber()} color="red" />
+            <button onClick={() => doSomething("Natalie")}>click Me</button>
+          </>
+        }/>
+      </Routes>
+    </div>
+  )
+}
+
+const getNumber = () => {
+  return 3
 }
 
 
-// const products = [ { id: 0, title: "Hat"}, { id: 1, title: "Shoes"} ]
+// REACT DOES THIS
+// props = {
+//   number: 3,
+//   color: "red"
+//   message: { text: "hello", author: "Natalie" }
+// }
+// MessageCard(props)
 
-// products.filter(  product => product.title === "Hat" ).map(  product => product.title ).filter(productTitle => productTitle.length > 5 )
 
-// const numbers = [0, 1, 2, 3, 4]
-// const evenNumbers = numbers.filter( number => number % 2 === 0)
+
+
 
 
 // function getFood() {
-//     return ["spaghetti", "meatballs"]
+//   return [ "meat", "cookies" ]
 // }
 
-// // const myFood = getFood()
-// // const boringPart = myFood[0]
-// // const excitingPart = myFood[1]
-
-// const [boringPart, excitingPart] = getFood()
+// const [ dinner, dessert ] = getFood()
