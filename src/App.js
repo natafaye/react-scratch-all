@@ -1,67 +1,53 @@
-import { useEffect } from "react";
-import { useState } from "react";
-
-// const doSomethingSlowly = async () => {
-//     const response = await fetch("http://localhost:3004/products")
-//     const data = await response.json()
-//     return data
-// }
+import { useEffect } from "react"
+import { useDispatch, useSelector } from "react-redux"
+import { fetchProducts } from "./productSlice"
 
 export default function App() {
-    const [productList, setProductList] = useState([])
-    const [loading, setLoading] = useState(false)
-    const [error, setError] = useState(null)
+  const productList = useSelector(state => state.products.productList)
+  const loading = useSelector(state => state.products.loading)
+  const errorMessage = useSelector(state => state.products.errorMessage)
 
-    useEffect(() => {
-        const refreshProducts = async () => {
-            setLoading(true)
-            const response = await fetch("http://localhost:3004/products")
-            const freshProducts = await response.json()
-            setLoading(false)
-            setProductList(freshProducts)
-        }
-        refreshProducts()
-    }, []) // empty array = no reason to ever do this again
+  const dispatch = useDispatch()
 
-    const deleteProduct = async (idToDelete) => {
-        try {
-            // PENDING
-            setLoading(true)
+  useEffect(() => {
+    dispatch(fetchProducts())
+  }, [dispatch]) // run once when page first loads in (or twice in development mode)
 
-            // ASYNC THUNK
-            const response = await fetch("http://localhost:3004/products/" + idToDelete, { method: "DELETE" })
+  const onDeleteClick = async (id) => {
+    // setLoading(true)
+    // // update the data on the backend
+    // try {
+    //   const response = await fetch("http://localhost:3004/products/" + id, {
+    //     method: "DELETE"
+    //   })
+    //   if(!response.ok) {
+    //     setLoading(false)
+    //     setErrorMessage(response.statusText)
+    //     return
+    //   }
+    //   setErrorMessage(null)
+    //   setLoading(false)
+    //   // update the data on the frontend
+    //   setProductList(productList.filter(product => product.id !== id))
+    // }
+    // catch (error) {
+    //   setLoading(false)
+    //   setErrorMessage(error.message)
+    // }
+  }
 
-            if (!response.ok) {
-                // REJECTED
-                setError("Error: " + response.statusText)
-                setLoading(false)
-                return
-            }
-
-            // FULFILLED
-            setLoading(false)
-            setProductList(productList.filter(product => product.id !== idToDelete))
-            setError(null)
-
-        } catch (error) {
-            // REJECTED
-            setLoading(false)
-            setError("Error: " + error.message)
-        }
-    }
-
-    return (
-        <div>
-            {error ? <p className="text-danger">{error}</p> : null}
-            {loading ? <p>Loading...</p> : null}
-            <ul>
-                {productList.map(product =>
-                    <li key={product.id}>
-                        {product.name}
-                        <button disabled={loading} onClick={() => deleteProduct(product.id)}>Delete</button>
-                    </li>
-                )}
-            </ul>
-        </div>
-    )
+  return (
+    <div>
+      {loading && <p className="text-body-secondary">Loading...</p>}
+      {errorMessage ? <p className="alert alert-danger">{errorMessage}</p> : null}
+      <ul className="list-group">
+        {productList.map(product => (
+          <li className="list-group-item" key={product.id}>
+            {product.name}
+            <button className="btn btn-danger" disabled={loading} onClick={() => onDeleteClick(product.id)}>Delete</button>
+          </li>
+        ))}
+      </ul>
+    </div>
+  )
 }
