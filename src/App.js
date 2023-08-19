@@ -1,26 +1,31 @@
-import { Route, Routes } from "react-router"
-import CrapPage from "./CrapPage"
-import AddForm from "./AddForm"
-import { useState } from "react"
+import { useState } from "react";
+import CatForm from "./CatForm";
 
-let nextId = 2 // little hacky way to get unique ids
+let nextId = 1 // little hack for making ids on the frontend
 
 export default function App() {
-  const [catList, setCatList] = useState([ { id: 0, name: "Floofy", favoriteFood: "pizza"}])
+  const [catList, setCatList] = useState( [
+    { id: 0, name: "Floofy", breed: "Ginger" }
+  ] )
 
   const addCat = (newCatData) => {
-    const newCat = { ...newCatData, id: nextId++ } // little hacky way to get unique ids
+    const newCat = { 
+      ...newCatData, // make a copy of newCatData
+      id: nextId++ // with an id property on it set to one more than the last id (little hack)
+    }
     setCatList(catList.concat(newCat))
   }
 
   return (
-    <div>
-      { catList.map(cat => <div key={cat.id}>{ cat.name }  { cat.favoriteFood}</div> )}
-      <Routes>
-        <Route path="/crap" element={<CrapPage/>}/>
-        <Route path="/" element={<AddForm addCat={addCat}/>}/>
-      </Routes>
+    <div className="container">
+      { catList.map(cat => (
+        <div key={cat.id}>
+            <h4>{cat.name}</h4>
+            <p>{cat.breed}</p>
+            <p>Whatever: {cat.whatever ? "yes" : "no"}</p>
+        </div>
+      ))}
+      <CatForm addCat={addCat}/>
     </div>
   )
 }
-
