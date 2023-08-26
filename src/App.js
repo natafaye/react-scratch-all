@@ -3,6 +3,7 @@ import Home from './Home'
 import { Route, Routes } from 'react-router'
 import ProductForm from './ProductForm'
 import { Link } from 'react-router-dom'
+import ProductDetailsPage from './ProductDetailsPage'
 
 export default function App() {
   return (
@@ -12,6 +13,7 @@ export default function App() {
       <Routes>
         <Route path="/" element={<Home/>}/>
         <Route path="/products/new" element={<ProductForm/>}/>
+        <Route path="/products/:productId" element={<ProductDetailsPage/>}/>
       </Routes>
     </div>
   )

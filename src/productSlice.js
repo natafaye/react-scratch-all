@@ -36,3 +36,10 @@ const productSlice = createSlice({
 export const productReducer = productSlice.reducer // NO S HERE
 // action creators that happen to be named the same as the mini reducers
 export const { addProduct, markProductAsSold, deleteProduct } = productSlice.actions // YES S HERE
+
+
+export const selectNumProducts = state => state.products.productArray.length
+
+export const selectAllProducts = state => state.products.productArray
+
+export const selectProductById = (productId) => (state) => state.products.productArray.find(p => p.id === productId)

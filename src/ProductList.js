@@ -1,8 +1,9 @@
 import { useDispatch, useSelector } from "react-redux"
-import { deleteProduct, markProductAsSold } from "./productSlice"
+import { deleteProduct, markProductAsSold, selectAllProducts } from "./productSlice"
+import { Link } from "react-router-dom"
 
 export default function ProductList() {
-    const products = useSelector(state => state.products.productArray)
+    const products = useSelector(selectAllProducts)
     const dispatch = useDispatch()
 
     const handleMarkSold = (idOfProductToMark) => {
@@ -17,6 +18,7 @@ export default function ProductList() {
                     { product.sold && <p className="display-6 text-danger">SOLD</p> }
                     { !product.sold && <button className="btn btn-danger ms-3" onClick={() => handleMarkSold(product.id)}>Mark as Sold</button> }
                     <button className="btn btn-warning" onClick={() => dispatch(deleteProduct(product.id))}>Delete</button>
+                    <Link to={`products/${product.id}`}>Details</Link>
                 </div>
             ))}
         </div>
