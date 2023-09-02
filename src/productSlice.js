@@ -1,33 +1,46 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 
-// An action creator that creates a THUNK action | thunk = action that's actually a function
+// thunk action creator by hand
 // export const fetchProducts = () => async (dispatch) => {
-//     // Update the backend data
-
+//     // PENDING
 //     dispatch(fetchProductsPending())
+
 //     try {
-//       const response = await fetch("http://localhost:3004/products")
-//       if (!response.ok) {
-//         dispatch(fetchProductsRejected(response.statusText))
-//         return
-//       }
-//       const data = await response.json()
-//       dispatch(fetchProductsFulfilled(data))
+//         // ACTUAL ASYNCHRONOUS STUFF
+//         const response = await fetch("http://localhost:3004/products")
+//         if (!response.ok) {
+//         throw new Error(response.statusText) // this will just make it jump down to the catch spot
+//         }
+//         const data = await response.json() // unsmooshify = parse (format) (read)
+
+//         // FULFILLED
+//         dispatch(fetchProductsFulfilled(data))
 //     } catch (error) {
-//       dispatch(fetchProductsRejected(error.message))
-//     }
+//         // REJECTED
+//         dispatch(fetchProductsRejected(error.message))
+//     } 
 // }
 
-export const fetchProducts = createAsyncThunk("fetch-products", async (payload, { dispatch }) => {
+
+export const fetchProducts = createAsyncThunk("fetch-products", async () => {
+    // ACTUAL ASYNCHRONOUS STUFF
     const response = await fetch("http://localhost:3004/products")
     if (!response.ok) {
-        return Promise.reject(response.statusText)
+        return Promise.rejected(response.statusText) 
     }
-    const data = await response.json()
-    // ANOTHER OPTION: dispatch yourself
-    //dispatch(loadProduct(data))
-    // NORMAL OPTION: return the result that you want in the fulfilled payload
-    return data // data will get put in a promise, then when it's fulfilled, this data will end up in the payload of the fulfilled action
+    const data = await response.json() // unsmooshify = parse (format) (read)
+    return data // payload for the fulfilled mini reducer
+})
+
+export const deleteProduct = createAsyncThunk("delete-product", async (idToDelete) => {
+    // ACTUAL ASYNCHRONOUS STUFF
+    const response = await fetch("http://localhost:3004/products/" + idToDelete, {
+    method: "DELETE"
+    })
+    if (!response.ok) {
+        return Promise.rejected(response.statusText) 
+    }
+    return idToDelete // payload for the fulfilled mini reducer
 })
 
 const productSlice = createSlice({
@@ -35,28 +48,11 @@ const productSlice = createSlice({
     initialState: {
         productList: [],
         loading: false,
-        errorMessage: null
+        errorMessage: null,
+        deleting: false
     },
     reducers: {
-        // Update the front end data
-        // fetchProductsPending: (state, action) => {
-        //     state.loading = true
-        // },
-        // fetchProductsFulfilled: (state, action) => {
-        //     state.loading = false
-        //     state.errorMessage = null
-        //     state.productList = action.payload
-        // },
-        // fetchProductsRejected: (state, action) => {
-        //     state.errorMessage = action.payload
-        //     state.loading = false
-        // }
-        // ANOTHER OPTION:
-        // loadProducts: (state, action) => {
-        //     state.loading = false
-        //     state.errorMessage = null
-        //     state.productList = action.payload
-        // }
+        
     },
     extraReducers: {
         [fetchProducts.pending]: (state, action) => {
@@ -64,15 +60,32 @@ const productSlice = createSlice({
         },
         [fetchProducts.fulfilled]: (state, action) => {
             state.loading = false
+            state.productList = action.payload // save the data from the backend into state (short term memory)
             state.errorMessage = null
-            state.productList = action.payload
         },
         [fetchProducts.rejected]: (state, action) => {
-            state.errorMessage = action.payload
             state.loading = false
-        }
+            state.errorMessage = action.error ? action.error.message : "Something went wrong"
+        },
+        [deleteProduct.pending]: (state, action) => {
+            state.deleting = true
+        },
+        [deleteProduct.fulfilled]: (state, action) => {
+            state.deleting = false
+            // Redux toolkit can NOT work off of copies - set state directly
+            // const indexToDelete = state.productList.findIndex(product => product.id === action.payload)
+            // state.productList.splice(indexToDelete, 1)
+
+            state.productList = state.productList.filter(product => product.id !== action.payload) // also make change on frontend
+            // make the same change on the frontend
+            state.errorMessage = null
+        },
+        [deleteProduct.rejected]: (state, action) => {
+            state.deleting = false
+            state.errorMessage = action.error ? action.error.message : "Something went wrong"
+        },
     }
 })
 
 export const productReducer = productSlice.reducer
-export const { fetchProductsFulfilled, fetchProductsPending, fetchProductsRejected } = productSlice.actions
+export const { fetchProductsPending, fetchProductsRejected, fetchProductsFulfilled } = productSlice.actions
